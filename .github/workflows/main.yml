@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+name: Run CacheWarmer on push
+ 
+  # Controls when the workflow will run
+on:
+  push:
+    # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+# Controls when the workflow will run everymidnight at 1 am
+# on:
+#   # Triggers the workflow every 5 minutes
+#   schedule:
+#     - cron: "0 1 * * *"
+
+jobs:
+  # This workflow contains a single job called "build-node"
+  build-node:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: 
+       # Pull Node v16 image 
+       image: node:16
+       # Setting up write permission
+       options: --user 1001
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: tj-actions/puppeteer@v5
+
+      # Print node version 
+      - run: node --version
+      # Print npm version 
+      - run: npm --version
+      # Github action to pull code from main branch 
+      - uses: actions/checkout@v4
+      
+      # Install dependecies
+      - run: npm install
+      # Exec Build command
+      - run: npm run build
+      # Serve the app
+      - run: npm run start

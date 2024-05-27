@@ -1,0 +1,24 @@
+{
+  "name": "py-ts-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "build": "tsc -p tsconfig.json",
+    "watch": "nodemon"
+  },
+  "author": "Hitesh Tare",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.5"
+  },
+  "dependencies": {
+    "@types/puppeteer": "^7.0.4",
+    "dotenv": "^16.3.1",
+    "log4js": "^6.9.1",
+    "puppeteer": "^21.11.0",
+    "puppeteer-core": "^21.6.1",
+    "typescript": "^5.3.3"
+  }
+}
