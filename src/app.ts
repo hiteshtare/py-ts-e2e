@@ -157,17 +157,45 @@ async function completePaymentAsGuest() {
   });
   logger.info(`Guest: Pay Now button is clicked`);
 
-  //Step : Click on Netbanking option from RazorPay popup
-  // const element = await page.$x('button[method="netbanking"]');
-  // if (element) {
-  //   logger.debug(`Guest: Razor Pay Netbanking is found`);
-  // }
+  //Step : Check for iframe of RazorPay modal
+  await page.waitForSelector('iframe');
+  logger.debug('Guest: RazorPay - iframe is ready. Loading iframe content');
   
-  // await page.waitForSelector('button:nth-child(3)');
-  // logger.debug(`Guest: RazorPay Netbanking option is found`);
-  // await page.click('button:nth-child(3)');
-  // logger.info(`Guest: RazorPay Netbanking option is clicked`);
+  const elementHandle = await page.$(
+    'iframe',
+  );
+  if (elementHandle) {
+    const frame = await elementHandle.contentFrame();
+    logger.warn(`Guest: RazorPay - Inside iframe`);
 
+    //Step : RazorPay - Click on Netbanking button
+    await frame.waitForSelector('button[method="netbanking"]');
+    logger.debug(`Guest: RazorPay - Netbanking option is found`);
+    await frame.click('button[method="netbanking"]');
+    logger.info(`Guest: RazorPay - Netbanking option is clicked`);
+
+    //Step : RazorPay - Click on ICICI from the banks
+    await frame.waitForSelector('#bank-item-ICIC');
+    logger.debug(`Guest: RazorPay - ICICI bank option is found`);
+    await frame.click('#bank-item-ICIC');
+    logger.info(`Guest: RazorPay - ICICI bank option is clicked`);
+    
+    //Step : RazorPay - lick on Pay Now button 
+    // await frame.waitForSelector('#redesign-v15-cta');
+    // logger.debug(`Guest: RazorPay - Pay Now button is found`);
+    // await frame.$eval('#redesign-v15-cta', (element) => {
+    //   if (element instanceof HTMLElement) {
+    //     element.click();
+    //   }
+    // });
+    // logger.info(`Guest: RazorPay - Pay Now button is clicked`);
+
+    await frame.waitForSelector('#redesign-v15-cta');
+    logger.debug(`Guest: RazorPay - Pay Now button is found`);
+    await frame.click('#redesign-v15-cta');
+    logger.info(`Guest: RazorPay - Pay Now button is clicked`);
+  }
+  
   //Step : Close the browser 
   // logger.warn(`Closing browser :)`);
   // await browser.close();
