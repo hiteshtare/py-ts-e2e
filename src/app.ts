@@ -66,11 +66,24 @@ async function navigatetoHomePage() {
     await page.click('.single_add_to_cart_button');
     logger.info(`LOGGED IN: Add to Cart button is clicked`);
 
+    //Step : Click on Proceed to Checkout button
     await page.waitForSelector('.checkout-button');
     logger.debug(`LOGGED IN: Proceed to Checkout button is found`);
     await page.click('.checkout-button');
     logger.info(`LOGGED IN: Proceed to Checkout button is clicked`);
+  
+    //Step : Enter all form details for guest user
+    // await page.type('#billing_email', `${process.env.BILLING_EMAIL}`);
+    // await page.type('#billing_phone', `${process.env.BILLING_PHONE}`);
+    // await page.type('#billing_first_name', `${process.env.BILLING_FIRST_NAME}`);
+    // await page.type('#billing_last_name', `${process.env.BILLING_LAST_NAME}`);
+    // await page.type('#billing_address_1', `${process.env.BILLING_ADDR1}`);
+    // await page.type('#billing_city', `${process.env.BILLING_CITY}`);
+    // //Set Dropdown value on Form  
+    // await page.select('#billing_state', `${process.env.BILLING_STATE}`)
+    // await page.type('#billing_postcode', `${process.env.BILLING_POSTCODE}`);
 
+    //Step : Click on Pay Now button
     await page.waitForSelector('#place_order');
     logger.debug(`LOGGED IN: Pay Now button is found`);
     await page.$eval('#place_order', (element) => { 
@@ -78,13 +91,13 @@ async function navigatetoHomePage() {
         element.click();
       }
     });
-     logger.info(`LOGGED IN: Pay Now button is clicked`);
+    logger.info(`LOGGED IN: Pay Now button is clicked`);
 
     // });
 
   }).finally(async ()=>{
-  //   //Step 6: Close the browser 
-  //   // logger.warn(`Closing browser :)`);
-  //   // await browser.close();
+    //Step 6: Close the browser 
+    // logger.warn(`Closing browser :)`);
+    // await browser.close();
   });
 }
