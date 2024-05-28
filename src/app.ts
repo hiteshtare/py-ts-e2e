@@ -182,17 +182,11 @@ async function completePaymentAsGuest() {
     await frame.click('#bank-item-ICIC');
     logger.info(`Guest: RazorPay - ICICI bank option is clicked`);
 
-     //Step : RazorPay - Click on Pay Now button
-    await frame.waitForSelector('#redesign-v15-cta');
+    //Step : RazorPay - Click on Pay Now button
+    await frame.waitForSelector('#redesign-v15-cta', { timeout: 2000 });
     logger.debug(`Guest: RazorPay - Pay Now button is found`);
-      await frame.$eval('#redesign-v15-cta', (element) => {
-      console.warn(`Guest: RazorPay - Inside Pay Now button`);
-      if (element instanceof HTMLElement) {
-      element.click();
-      }
-    });
+    await frame.click('#redesign-v15-cta', { delay: 2000 });
     logger.info(`Guest: RazorPay - Pay Now button is clicked`);
-    
   }
   
   //Step : Close the browser 
