@@ -17,18 +17,19 @@ setLoggerLevel();
 // Logger initialise
 const logger = getLoggerLevel();
 
-navigatetoHomePage();
+completePaymentUsingLogin();
 
-async function navigatetoHomePage() {
-  logger.warn(`Inside navigatetoHomePage menthod`);
+async function completePaymentUsingLogin() {
+  logger.warn(`completePaymentUsingLogin menthod`);
 
   const browser = await puppeteer.launch({
     headless: false,
-    args: ['--no-sandbox']
+    args: ['--no-sandbox','--start-maximized']
   });
 
   const page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 1000 });
+  await page.setViewport({ width: 1366, height: 1080});
+  // await page.setViewport({width: 1920, height: 1080});
 
   //Step 1: Open Bookstore page
   await page.goto('https://test.yssofindia.org/bookstore', { waitUntil: 'networkidle0' }); // wait until page load
@@ -93,11 +94,9 @@ async function navigatetoHomePage() {
     });
     logger.info(`LOGGED IN: Pay Now button is clicked`);
 
-    // });
-
   }).finally(async ()=>{
-    //Step 6: Close the browser 
-    // logger.warn(`Closing browser :)`);
-    // await browser.close();
+    //Step : Close the browser 
+    logger.warn(`Closing browser :)`);
+    await browser.close();
   });
 }
