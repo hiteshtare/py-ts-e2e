@@ -17,7 +17,8 @@ setLoggerLevel();
 // Logger initialise
 const logger = getLoggerLevel();
 
-completePaymentUsingLogin();
+// completePaymentUsingLogin();
+completePaymentAsGuest();
 
 async function completePaymentUsingLogin() {
   logger.warn(`completePaymentUsingLogin menthod`);
@@ -99,4 +100,75 @@ async function completePaymentUsingLogin() {
     logger.warn(`Closing browser :)`);
     await browser.close();
   });
+}
+
+async function completePaymentAsGuest() {
+  logger.warn(`completePaymentAsGuest menthod`);
+
+  const browser = await puppeteer.launch({
+    headless: false,
+    args: ['--no-sandbox','--start-maximized']
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1366, height: 1080});
+  // await page.setViewport({width: 1920, height: 1080});
+
+  //Step : Open Bookstore page
+  await page.goto('https://test.yssofindia.org/bookstore', { waitUntil: 'networkidle0' }); // wait until page load
+  logger.info(`Guest: Bookstore page is loaded`);
+
+  //Step : Open AOY page in bookstore
+  await page.goto('https://test.yssofindia.org/product/autobiography-of-a-yogi', { waitUntil: 'networkidle0' }); // wait until page load
+  logger.info(`Guest: AOY is loaded`);
+
+  //Step : Click on Add to Cart button
+  await page.waitForSelector('.single_add_to_cart_button');
+  logger.debug(`Guest: Add to Cart button is found`);
+  await page.click('.single_add_to_cart_button');
+  logger.info(`Guest: Add to Cart button is clicked`);
+
+  //Step : Click on Proceed to Checkout button
+  await page.waitForSelector('.checkout-button');
+  logger.debug(`Guest: Proceed to Checkout button is found`);
+  await page.click('.checkout-button');
+  logger.info(`Guest: Proceed to Checkout button is clicked`);
+
+  await page.waitForSelector('#billing_email');
+  logger.debug(`Guest: Billing Form is found`);
+  //Step : Enter all form details for guest user
+  await page.type('#billing_email', `${process.env.BILLING_EMAIL}`);
+  await page.type('#billing_phone', `${process.env.BILLING_PHONE}`);
+  await page.type('#billing_first_name', `${process.env.BILLING_FIRST_NAME}`);
+  await page.type('#billing_last_name', `${process.env.BILLING_LAST_NAME}`);
+  await page.type('#billing_address_1', `${process.env.BILLING_ADDR1}`);
+  await page.type('#billing_city', `${process.env.BILLING_CITY}`);
+  //Set Dropdown value on Form  
+  await page.select('#billing_state', `${process.env.BILLING_STATE}`)
+  await page.type('#billing_postcode', `${process.env.BILLING_POSTCODE}`);
+
+  //Step : Click on Pay Now button
+  await page.waitForSelector('#place_order');
+  logger.debug(`Guest: Pay Now button is found`);
+  await page.$eval('#place_order', (element) => {
+    if (element instanceof HTMLElement) {
+      element.click();
+    }
+  });
+  logger.info(`Guest: Pay Now button is clicked`);
+
+  //Step : Click on Netbanking option from RazorPay popup
+  // const element = await page.$x('button[method="netbanking"]');
+  // if (element) {
+  //   logger.debug(`Guest: Razor Pay Netbanking is found`);
+  // }
+  
+  // await page.waitForSelector('button:nth-child(3)');
+  // logger.debug(`Guest: RazorPay Netbanking option is found`);
+  // await page.click('button:nth-child(3)');
+  // logger.info(`Guest: RazorPay Netbanking option is clicked`);
+
+  //Step : Close the browser 
+  // logger.warn(`Closing browser :)`);
+  // await browser.close();
 }
