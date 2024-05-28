@@ -61,17 +61,28 @@ async function navigatetoHomePage() {
     logger.info(`LOGGED IN: AOY is loaded`);
 
     //Step : Click on Add to Cart button
-    await page.click('.single_add_to_cart_button');
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
-    logger.info(`LOGGED IN: Add to Cart is loaded`);
+  await page.click('.single_add_to_cart_button');
+  logger.info(`LOGGED IN: Add to Cart button is clicked`);
+    await page.waitForNavigation({ waitUntil: 'load' })
 
-    //Step : Click on Check out button
-    // await page.click('.checkout-button');
-    // await page.waitForNavigation({ waitUntil: 'networkidle0' });
+      logger.info(`LOGGED IN: Add to Cart is loaded`);
+
+      //Step : Click on Proceed to Checkout button
+  await page.click('.checkout-button');
+  logger.info(`LOGGED IN: Proceed to Checkout button is clicked`);
+  await page.waitForNavigation({ waitUntil: 'networkidle0' })
+
+      //Step : Click on Pay Now button
+  await page.click('[type="submit"]');
+  logger.info(`LOGGED IN: Pay Now button is clicked`);
+  // await page.waitForNavigation({ waitUntil: 'load' })
+
+      
+    // });
 
   }).finally(async ()=>{
-    //Step 6: Close the browser 
-    // logger.warn(`Closing browser :)`);
-    // await browser.close();
+  //   //Step 6: Close the browser 
+  //   // logger.warn(`Closing browser :)`);
+  //   // await browser.close();
   });
 }
