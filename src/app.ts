@@ -107,11 +107,13 @@ async function completePaymentAsGuest() {
 
   const browser = await puppeteer.launch({
     headless: false,
-    args: ['--no-sandbox','--start-maximized']
+    args: ['--no-sandbox',]
+    // args: ['--no-sandbox','--start-maximized']
   });
 
   const page = await browser.newPage();
-  await page.setViewport({ width: 1366, height: 1080});
+  await page.setViewport({ width: 1200, height: 1000 });
+  // await page.setViewport({ width: 1366, height: 1080});
   // await page.setViewport({width: 1920, height: 1080});
 
   //Step : Open Bookstore page
@@ -179,21 +181,18 @@ async function completePaymentAsGuest() {
     logger.debug(`Guest: RazorPay - ICICI bank option is found`);
     await frame.click('#bank-item-ICIC');
     logger.info(`Guest: RazorPay - ICICI bank option is clicked`);
-    
-    //Step : RazorPay - lick on Pay Now button 
-    // await frame.waitForSelector('#redesign-v15-cta');
-    // logger.debug(`Guest: RazorPay - Pay Now button is found`);
-    // await frame.$eval('#redesign-v15-cta', (element) => {
-    //   if (element instanceof HTMLElement) {
-    //     element.click();
-    //   }
-    // });
-    // logger.info(`Guest: RazorPay - Pay Now button is clicked`);
 
+     //Step : RazorPay - Click on Pay Now button
     await frame.waitForSelector('#redesign-v15-cta');
     logger.debug(`Guest: RazorPay - Pay Now button is found`);
-    await frame.click('#redesign-v15-cta');
+      await frame.$eval('#redesign-v15-cta', (element) => {
+      console.warn(`Guest: RazorPay - Inside Pay Now button`);
+      if (element instanceof HTMLElement) {
+      element.click();
+      }
+    });
     logger.info(`Guest: RazorPay - Pay Now button is clicked`);
+    
   }
   
   //Step : Close the browser 
