@@ -182,11 +182,23 @@ async function completePaymentAsGuest() {
     await frame.click('#bank-item-ICIC');
     logger.info(`Guest: RazorPay - ICICI bank option is clicked`);
 
+    //Step : RazorPay - Handle postback and popup window 
+    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));	
+    
     //Step : RazorPay - Click on Pay Now button
     await frame.waitForSelector('#redesign-v15-cta', { timeout: 2000 });
     logger.debug(`Guest: RazorPay - Pay Now button is found`);
     await frame.click('#redesign-v15-cta', { delay: 2000 });
     logger.info(`Guest: RazorPay - Pay Now button is clicked`);
+    
+    //Step : RazorPay - Initialise new popup window object 
+    const popup = await newPagePromise as puppeteer.Page;
+    
+    //Step : RazorPay - Click on green Success button on Demo bank page
+    await popup.waitForSelector('.success');
+    logger.debug(`Guest: RazorPay (Demo bank page) - Success button is found`);
+    await popup.click('.success');
+    logger.info(`Guest: RazorPay (Demo bank page) - Success button is clicked`);    
   }
   
   //Step : Close the browser 
