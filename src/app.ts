@@ -61,23 +61,25 @@ async function navigatetoHomePage() {
     logger.info(`LOGGED IN: AOY is loaded`);
 
     //Step : Click on Add to Cart button
-  await page.click('.single_add_to_cart_button');
-  logger.info(`LOGGED IN: Add to Cart button is clicked`);
-    await page.waitForNavigation({ waitUntil: 'load' })
+    await page.waitForSelector('.single_add_to_cart_button');
+    logger.debug(`LOGGED IN: Add to Cart button is found`);
+    await page.click('.single_add_to_cart_button');
+    logger.info(`LOGGED IN: Add to Cart button is clicked`);
 
-      logger.info(`LOGGED IN: Add to Cart is loaded`);
+    await page.waitForSelector('.checkout-button');
+    logger.debug(`LOGGED IN: Proceed to Checkout button is found`);
+    await page.click('.checkout-button');
+    logger.info(`LOGGED IN: Proceed to Checkout button is clicked`);
 
-      //Step : Click on Proceed to Checkout button
-  await page.click('.checkout-button');
-  logger.info(`LOGGED IN: Proceed to Checkout button is clicked`);
-  await page.waitForNavigation({ waitUntil: 'networkidle0' })
+    await page.waitForSelector('#place_order');
+    logger.debug(`LOGGED IN: Pay Now button is found`);
+    await page.$eval('#place_order', (element) => { 
+      if (element instanceof HTMLElement) {
+        element.click();
+      }
+    });
+     logger.info(`LOGGED IN: Pay Now button is clicked`);
 
-      //Step : Click on Pay Now button
-  await page.click('[type="submit"]');
-  logger.info(`LOGGED IN: Pay Now button is clicked`);
-  // await page.waitForNavigation({ waitUntil: 'load' })
-
-      
     // });
 
   }).finally(async ()=>{
