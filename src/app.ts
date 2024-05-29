@@ -1,8 +1,6 @@
 // Import node modules
 import path = require('path');
 import puppeteer = require('puppeteer');
-import readline = require('readline');
-import fs = require('fs');
 import dotenv = require('dotenv');
 
 // Import custom modules
